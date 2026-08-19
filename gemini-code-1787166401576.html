@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Nody ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff2a5f;
+            --primary-glow: #ff758c;
+            --purple-glow: #7928ca;
+            --bg-dark: #05010a;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-light: #ffffff;
+            --accent: #ffb3c1;
+            --gold: #ffd700;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1200px;
+        }
+
+        .aurora-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 42, 95, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(121, 40, 202, 0.35) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 117, 140, 0.15) 0%, transparent 60%);
+            filter: blur(70px);
+            animation: pulseBg 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        #particles-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 117, 140, 0.6);
+            animation: floatUp var(--duration) linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.9; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* ------------------ 3D LANDING PAGE WITH BACKGROUND IMAGE ------------------ */
+        #landing-page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            background: linear-gradient(rgba(5, 1, 10, 0.65), rgba(5, 1, 10, 0.75)), 
+                        url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .landing-card-3d {
+            background: rgba(20, 10, 30, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 50px 40px;
+            border-radius: 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 42, 95, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .landing-card-3d::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 37px;
+            background: linear-gradient(45deg, var(--primary), transparent, var(--purple-glow));
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(12px);
+        }
+
+        .landing-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.2rem;
+            background: linear-gradient(45deg, #ff758c, #ffb3c1, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 42, 95, 0.6);
+            margin-bottom: 15px;
+            transform: translateZ(30px);
+        }
+
+        .landing-question {
+            font-size: 2rem;
+            margin-bottom: 35px;
+            color: #ffffff;
+            font-weight: 600;
+            transform: translateZ(20px);
+        }
+
+        .buttons-container {
+            position: relative;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 80px;
+            transform: translateZ(40px);
+        }
+
+        .btn-yes {
+            padding: 16px 45px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--purple-glow));
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 42, 95, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 45px rgba(255, 42, 95, 1);
+        }
+
+        .btn-no {
+            padding: 16px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.15s ease-out;
+            position: absolute;
+        }
+
+        /* ------------------ MAIN CONTENT ------------------ */
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.2s ease;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 50px 20px 120px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .main-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.8rem;
+            background: linear-gradient(45deg, #ff758c, #ffb3c1, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 42, 95, 0.5);
+        }
+
+        .counter-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        .counter-title {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .time-box {
+            background: rgba(255, 42, 95, 0.12);
+            padding: 18px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 42, 95, 0.3);
+            box-shadow: inset 0 0 20px rgba(255, 42, 95, 0.15);
+        }
+
+        .time-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+            display: block;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: #d1c4e9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* PHOTO GALLERY */
+        .gallery-title {
+            font-size: 2rem;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .polaroid-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .polaroid-frame {
+            background: #ffffff;
+            padding: 12px 12px 35px 12px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 270px;
+            cursor: pointer;
+        }
+
+        .polaroid-frame:nth-child(1) { transform: rotate(-3deg); }
+        .polaroid-frame:nth-child(2) { transform: rotate(2deg); }
+        .polaroid-frame:nth-child(3) { transform: rotate(-2deg); }
+
+        .polaroid-frame:hover {
+            transform: rotate(0deg) scale(1.08) translateY(-10px);
+            box-shadow: 0 25px 50px rgba(255, 42, 95, 0.4);
+            z-index: 5;
+        }
+
+        .polaroid-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #111;
+        }
+
+        .polaroid-caption {
+            font-family: 'Dancing Script', cursive;
+            color: #1a0628;
+            font-size: 1.45rem;
+            text-align: center;
+            margin-top: 12px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        /* ------------------ QUEST SYSTEM ------------------ */
+        .quest-container {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 30px;
+            padding: 40px 25px;
+            backdrop-filter: blur(20px);
+            text-align: center;
+            margin-bottom: 70px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
+
+        .quest-header {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .quest-subtitle {
+            font-family: 'Amiri', serif;
+            color: #d1c4e9;
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        .quest-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--primary-glow);
+            border-radius: 20px;
+            padding: 30px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quest-step-title {
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .quest-question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .quest-input {
+            width: 80%;
+            max-width: 320px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--primary-glow);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .quest-btn {
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--purple-glow));
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 42, 95, 0.5);
+            transition: all 0.3s;
+        }
+
+        .quest-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 42, 95, 0.8);
+        }
+
+        .quest-error {
+            color: #ff4d4d;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* REASONS LIST */
+        #reasons-wrapper {
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .reasons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .reason-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            padding: 20px 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            text-align: left;
+        }
+
+        .reason-item:hover {
+            transform: translateX(10px) scale(1.01);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-glow);
+            box-shadow: 0 5px 25px rgba(255, 42, 95, 0.25);
+        }
+
+        .reason-num {
+            background: linear-gradient(135deg, var(--primary), var(--purple-glow));
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(255, 42, 95, 0.6);
+        }
+
+        /* ------------------ BEAUTIFIED SECRET MESSAGES ------------------ */
+        .section-header {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin: 60px 0 10px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #d1c4e9;
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .gift-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            padding: 30px 20px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gift-card.unopened {
+            background: linear-gradient(135deg, rgba(255, 42, 95, 0.15), rgba(121, 40, 202, 0.22));
+            border: 1.5px dashed var(--primary-glow);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .gift-card.unopened:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: var(--gold);
+            box-shadow: 0 15px 35px rgba(255, 42, 95, 0.4);
+        }
+
+        .gift-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 117, 140, 0.6));
+        }
+
+        .gift-card.unopened:hover .gift-icon {
+            transform: scale(1.25) rotate(12deg);
+        }
+
+        .gift-label {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .gift-card.opened {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--primary-glow);
+            box-shadow: 0 10px 30px rgba(255, 42, 95, 0.3);
+            transform: scale(1.02);
+        }
+
+        .gift-message {
+            display: none;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #ffffff;
+            font-weight: 500;
+            font-family: 'Amiri', serif;
+            direction: rtl;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FLOATING MUSIC BAR */
+        .music-bar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: rgba(5, 1, 10, 0.85);
+            border: 1px solid var(--primary-glow);
+            padding: 12px 22px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, var(--primary), var(--purple-glow));
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(255, 42, 95, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-top: 60px;
+            text-shadow: 0 0 20px rgba(255, 42, 95, 0.6);
+        }
+
+        @media (max-width: 600px) {
+            .landing-title { font-size: 3.2rem; }
+            .landing-question { font-size: 1.6rem; }
+            .main-title { font-size: 3.5rem; }
+            .timer-grid { grid-template-columns: repeat(2, 1fr); }
+            .polaroid-frame { width: 100%; max-width: 280px; }
+            .buttons-container { flex-direction: column; gap: 15px; }
+            .btn-no { position: relative; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+    <div id="particles-container"></div>
+
+    <!-- AUDIO FILE -->
+    <audio id="bg-music" loop>
+        <source src="https://files.catbox.moe/r0sqex.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 3D LANDING PAGE WITH BACKGROUND IMAGE -->
+    <div id="landing-page">
+        <div class="landing-card-3d" id="card3d">
+            <h1 class="landing-title">Hey Nody 😉❤️</h1>
+            <p class="landing-question">Do you love me?</p>
+            <div class="buttons-container">
+                <button class="btn-yes" onclick="enterSite()">YES OF COURSE</button>
+                <button class="btn-no" id="no-btn">NO 😜</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+        <div class="header-section">
+            <h1 class="main-title">Nody World ❤️</h1>
+        </div>
+
+        <!-- FRIENDSHIP COUNTER -->
+        <div class="counter-card">
+            <div class="counter-title">Best Friends For ⏳✨</div>
+            <div class="timer-grid">
+                <div class="time-box">
+                    <span class="time-value" id="days">0</span>
+                    <span class="time-label">Days</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-value" id="hours">0</span>
+                    <span class="time-label">Hours</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-value" id="minutes">0</span>
+                    <span class="time-label">Minutes</span>
+                </div>
+                <div class="time-box">
+                    <span class="time-value" id="seconds">0</span>
+                    <span class="time-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHOTO GALLERY -->
+        <div class="gallery-title">My Favorite Person 📸✨</div>
+        <div class="polaroid-grid">
+            <div class="polaroid-frame">
+                <img src="https://i.postimg.cc/L54Xpnx9/Whats-App-Image-2026-08-19-at-7-35-25-PM.jpg" alt="Nody Photo 1" class="polaroid-img">
+                <div class="polaroid-caption">Best friends forever ❤️</div>
+            </div>
+            <div class="polaroid-frame">
+                <img src="https://i.postimg.cc/02BNT5DN/Whats-App-Image-2026-08-19-at-7-47-26-PM.jpg" alt="Nody Photo 2" class="polaroid-img">
+                <div class="polaroid-caption">Unforgettable memories ✨</div>
+            </div>
+            <div class="polaroid-frame">
+                <img src="https://files.catbox.moe/7oqkp4.jpeg" alt="Nody Photo 3" class="polaroid-img">
+                <div class="polaroid-caption">Lucky to have you in my life 👭</div>
+            </div>
+        </div>
+
+        <!-- REASONS QUEST GAME -->
+        <div class="quest-container">
+            <div class="quest-header">10 Reasons Why I Love You 🔐</div>
+            <p class="quest-subtitle">لو عايزه تعرفي أسباب حبي ليكي يا ندى؟ يبقى لازم تفتحي التلات أقفال دول 😉</p>
+
+            <div class="quest-box" id="quest-box">
+                <div class="quest-step-title" id="step-title">Stage 1 / 3 🔑</div>
+                <div class="quest-question" id="step-question">Who is the luckiest girl in the world?<br><small style="font-family:'Amiri', serif; font-size:0.95rem; color: var(--accent);">(Hint: اكتب اسمك بالEnglish 😉)</small></div>
+                <input type="text" class="quest-input" id="quest-input" placeholder="Type your answer...">
+                <br>
+                <button class="quest-btn" onclick="checkQuestAnswer()">Unlock Next Lock 🔓</button>
+                <div class="quest-error" id="quest-error">Wrong answer! Think again 😉</div>
+            </div>
+
+            <!-- UNLOCKED REASONS -->
+            <div id="reasons-wrapper">
+                <div class="reasons-list">
+                    <div class="reason-item"><div class="reason-num">1</div>You always make me feel safe</div>
+                    <div class="reason-item"><div class="reason-num">2</div>You know me better than anyone</div>
+                    <div class="reason-item"><div class="reason-num">3</div>You have the kindest heart</div>
+                    <div class="reason-item"><div class="reason-num">4</div>You always know how to make me laugh</div>
+                    <div class="reason-item"><div class="reason-num">5</div>You never make me feel alone</div>
+                    <div class="reason-item"><div class="reason-num">6</div>I can always be my true self with you</div>
+                    <div class="reason-item"><div class="reason-num">7</div>You have been there since the beginning</div>
+                    <div class="reason-item"><div class="reason-num">8</div>You make even ordinary moments special</div>
+                    <div class="reason-item"><div class="reason-num">9</div>You understand me without words</div>
+                    <div class="reason-item"><div class="reason-num">10</div>You are simply you and I could never replace you ❤️</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BEAUTIFIED SECRET MESSAGES -->
+        <div class="section-header">Unwrap My Heart ✨💖</div>
+        <div class="section-subtitle">Tap on any card to reveal a secret message!</div>
+        <div class="gift-grid">
+            <div class="gift-card unopened" onclick="openGift(this)">
+                <div class="gift-icon">💖</div>
+                <div class="gift-label">Secret Note 1</div>
+                <div class="gift-message">انتي عمرك متتخيلي يندي انا بحبك قد اي ولا انتي عندي اي انا بحبهم كلهم و كلهم اخواتي بس انتي كنتي و هتفضلي ديما ليكي مكان عندي غير اي حد يا حبيبتي والله ❤️</div>
+            </div>
+            <div class="gift-card unopened" onclick="openGift(this)">
+                <div class="gift-icon">💌</div>
+                <div class="gift-label">Secret Note 2</div>
+                <div class="gift-message">ربنا يخليكي ليا يا كل حياتي انتي و معلومه ليكي انا اللي هختارلك عريسك عشان مش اي حد يستاهل طيبتك و حنيتك و جمالك ده 👑</div>
+            </div>
+            <div class="gift-card unopened" onclick="openGift(this)">
+                <div class="gift-icon">🎀</div>
+                <div class="gift-label">Secret Note 3</div>
+                <div class="gift-message">انا بس عايزه اقولك يندي اننا فعلا بتمني انو انا اللي افارق الاول بجد عشان عمري مهستحمل الدنيا دي من غيرك والله 🕊️❤️</div>
+            </div>
+        </div>
+
+        <footer>Always & Forever ❤️</footer>
+    </div>
+
+    <!-- FLOATING MUSIC PLAYER -->
+    <div class="music-bar">
+        <button class="music-btn" id="play-pause-btn" onclick="toggleMusic()">🎵</button>
+        <span class="music-info" id="music-status">This Song Is For You 🎵</span>
+    </div>
+
+    <script>
+        // 3D Card Effect
+        const card3D = document.getElementById('card3d');
+        document.addEventListener('mousemove', (e) => {
+            if (document.getElementById('landing-page').style.visibility === 'hidden') return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+            card3D.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Floating Hearts
+        const container = document.getElementById('particles-container');
+        const hearts = ['❤️', '💖', '✨', '💕', '🌸'];
+        for (let i = 0; i < 35; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 15 + 12) + 'px';
+            heart.style.setProperty('--duration', (Math.random() * 8 + 6) + 's');
+            heart.style.animationDelay = (Math.random() * 5) + 's';
+            container.appendChild(heart);
+        }
+
+        // Runaway NO Button
+        const noBtn = document.getElementById('no-btn');
+        function moveNoButton() {
+            const padding = 50;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            
+            const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+            const randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', function(e) { e.preventDefault(); moveNoButton(); });
+
+        // Enter Site
+        function enterSite() {
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+            const landing = document.getElementById('landing-page');
+            const main = document.getElementById('main-content');
+            
+            landing.style.opacity = '0';
+            setTimeout(() => {
+                landing.style.visibility = 'hidden';
+                main.style.visibility = 'visible';
+                main.style.opacity = '1';
+            }, 800);
+
+            const audio = document.getElementById('bg-music');
+            audio.play().catch(e => console.log("Autoplay blocked"));
+        }
+
+        // Toggle Music
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('play-pause-btn');
+            const status = document.getElementById('music-status');
+            
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = '🎵';
+                status.textContent = 'This Song Is For You 🎵';
+            } else {
+                audio.pause();
+                btn.innerHTML = '🔇';
+                status.textContent = 'Music Paused';
+            }
+        }
+
+        // QUEST SYSTEM JS LOGIC
+        let currentStep = 1;
+        const questData = [
+            {
+                stepTitle: "Stage 1 / 3 🔑",
+                question: "Who is the luckiest girl in the world?<br><small style=\"font-family:'Amiri', serif; font-size:0.95rem; color: var(--accent);\">(Hint: اكتب اسمك بالEnglish 😉)</small>",
+                answers: ["nody", "nada", "ندى", "ندي"]
+            },
+            {
+                stepTitle: "Stage 2 / 3 🔑",
+                question: "Do you love me? (Yes / No)",
+                answers: ["yes", "نعم", "ايوه", "اه", "اكيد"]
+            },
+            {
+                stepTitle: "Stage 3 / 3 🔑",
+                question: "Who is Nody's favorite best friend forever?",
+                answers: ["raghad", "رغد"]
+            }
+        ];
+
+        function checkQuestAnswer() {
+            const inputVal = document.getElementById('quest-input').value.trim().toLowerCase();
+            const errorElement = document.getElementById('quest-error');
+            const currentQuest = questData[currentStep - 1];
+
+            if (currentQuest.answers.some(ans => inputVal.includes(ans))) {
+                errorElement.style.display = 'none';
+                document.getElementById('quest-input').value = '';
+                
+                confetti({ particleCount: 40, spread: 50 });
+
+                currentStep++;
+                if (currentStep <= questData.length) {
+                    document.getElementById('step-title').textContent = questData[currentStep - 1].stepTitle;
+                    document.getElementById('step-question').innerHTML = questData[currentStep - 1].question;
+                } else {
+                    document.getElementById('quest-box').style.display = 'none';
+                    document.getElementById('reasons-wrapper').style.display = 'block';
+                    confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+                }
+            } else {
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // GIFT BOX UNWRAP LOGIC
+        function openGift(card) {
+            if (card.classList.contains('opened')) return;
+
+            card.classList.remove('unopened');
+            card.classList.add('opened');
+            
+            const icon = card.querySelector('.gift-icon');
+            const label = card.querySelector('.gift-label');
+            const msg = card.querySelector('.gift-message');
+
+            icon.style.display = 'none';
+            label.style.display = 'none';
+            msg.style.display = 'block';
+
+            confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.7 }
+            });
+        }
+
+        // TIMER COUNTER (يناير 2017)
+        const startDate = new Date('2017-01-01T00:00:00');
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            }
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+    </script>
+</body>
+</html>
